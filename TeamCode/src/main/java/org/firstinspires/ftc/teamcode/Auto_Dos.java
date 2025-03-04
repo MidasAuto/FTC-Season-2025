@@ -20,7 +20,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
-@Autonomous(name = "Dos Auto", group = "Autonomous")
+@Autonomous(name = "Auto_Dos", group = "Autonomous")
 public class Auto_Dos extends LinearOpMode {
 
     // Variables
@@ -71,7 +71,7 @@ public class Auto_Dos extends LinearOpMode {
     public class MoveMotor {
         private DcMotorEx motor1, motor2;
         private double targetPosition = 0;
-        private static final double THRESHOLD = 10; // Define the threshold for reaching the target
+        private static final double THRESHOLD1 = 10; // Define the threshold for reaching the target
 
         public MoveMotor(HardwareMap hardwareMap) {
             motor1 = hardwareMap.get(DcMotorEx.class, "armVerticalMotor");
@@ -96,8 +96,8 @@ public class Auto_Dos extends LinearOpMode {
             motor2.setPower(power);
         }
 
-        public boolean isAtTarget() {
-            return Math.abs(targetPosition - motor1.getCurrentPosition()) <= THRESHOLD;
+        public boolean isAtTargetMM() {
+            return Math.abs(targetPosition - motor1.getCurrentPosition()) <= THRESHOLD1;
         }
     }
 
@@ -113,7 +113,7 @@ public class Auto_Dos extends LinearOpMode {
         @Override
         public boolean run(TelemetryPacket packet) {
             moveMotor.rotateMotor(targetPosition);
-            return !moveMotor.isAtTarget(); // Return false when the motor is at the target position
+            return !moveMotor.isAtTargetMM(); // Return false when the motor is at the target position
         }
     }
 
@@ -149,7 +149,7 @@ public class Auto_Dos extends LinearOpMode {
         }
     }
     private static final int MAX_TICKS = 2000;
-    public static final int THRESHOLD = 80;
+    public static final int THRESHOLD2 = 40;
     // MoveArm class for controlling the arm motors
     public class MoveClaw3 {
         private Servo servo3;
@@ -162,7 +162,6 @@ public class Auto_Dos extends LinearOpMode {
             servo3.setPosition(Range.clip(position, 0.0, 1.0)); // Clipping to valid servo range (0.0 to 1.0)
         }
     }
-
     public class MoveClaw3Action implements Action {
         private MoveClaw3 moveClaw3;
         private double targetPosition;
@@ -245,13 +244,13 @@ public class Auto_Dos extends LinearOpMode {
             double currentPosition = armMotor.getCurrentPosition() + armMotor2.getCurrentPosition();
             double error = targetPosition - currentPosition;
             double power = 1;
-
+            /*
             if (error < 10) {
                 power *= -1;
             } else if (error > 10) {
                 power *= 1;
             }
-
+            */
             power = Range.clip(power, -1.0, 1.0);
             armMotor.setPower(power);
             armMotor2.setPower(power);
@@ -263,7 +262,7 @@ public class Auto_Dos extends LinearOpMode {
         }
 
         public boolean isAtTarget() {
-            return Math.abs(targetPosition - armMotor.getCurrentPosition()) <= THRESHOLD;
+            return Math.abs(targetPosition - armMotor.getCurrentPosition()) <= THRESHOLD2;
         }
         public class MoveMotor {
             private DcMotorEx motor1, motor2;
@@ -291,9 +290,9 @@ public class Auto_Dos extends LinearOpMode {
                 motor2.setPower(power);
             }
 
-            public boolean isAtTarget() {
+            public boolean isAtTarget2() {
                 //return Math.abs(targetPosition - motor1.getCurrentPosition()) <= 80;
-                return (targetPosition - motor1.getCurrentPosition()) * (targetPosition - motor1.getCurrentPosition()) <= 100;
+                return (targetPosition - motor1.getCurrentPosition()) <= 100;
             }
         }
 
@@ -309,7 +308,7 @@ public class Auto_Dos extends LinearOpMode {
             @Override
             public boolean run(TelemetryPacket packet) {
                 moveMotor.rotateMotor(targetPosition);
-                return !moveMotor.isAtTarget(); // Return false when the motor is at the target position
+                return !moveMotor.isAtTarget2(); // Return false when the motor is at the target position
             }
         }
     }
@@ -317,12 +316,15 @@ public class Auto_Dos extends LinearOpMode {
     // MoveArmAction class for integrating arm movement into RoadRunner
     public class MoveArmAction implements Action {
         private MoveArm moveArm;
+        private DcMotorEx motor1;
         private double targetPosition;
 
         public MoveArmAction(MoveArm moveArm, double targetPosition) {
             this.moveArm = moveArm;
             this.targetPosition = Range.clip(targetPosition, 0, MAX_TICKS);
         }
+
+        double THRESHOLD = 10;
 
         @Override
         public boolean run(TelemetryPacket packet) {
@@ -357,7 +359,7 @@ public class Auto_Dos extends LinearOpMode {
             MoveClaw3Action ClawClosed2 = new MoveClaw3Action(moveClaw3, 0.2);
             MoveClaw2Action ClawOpen = new MoveClaw2Action(moveClaw2, 0.6);
             MoveClaw3Action ClawOpen2 = new MoveClaw3Action(moveClaw3, 0.4);
-            MoveMotorAction MotorPosition = new MoveMotorAction(moveMotor, 8000);
+            MoveArmAction MotorPosition = new MoveArmAction(moveArm, 8000);
             // Execute the action to move the arm
             Actions.runBlocking(drive.actionBuilder(startPose)
                     .strafeToLinearHeading(new Vector2d(84, 41.5), Math.toRadians(90),
