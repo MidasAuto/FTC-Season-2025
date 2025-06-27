@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name = "TeleOp")
-public class TeleOpV extends OpMode {
+@TeleOp(name = "ArmLower")
+public class ArmLower extends OpMode {
 
     DcMotor frontRightMotor;
     DcMotor frontLeftMotor;
@@ -72,34 +72,11 @@ public class TeleOpV extends OpMode {
         double bRightPower = drive + turn - strafe;
         double bLeftPower = drive - turn + strafe;
 
-        armVerticalMotor.setPower(verticalPower);
-        armVerticalMotor2.setPower(verticalPower);
+        armVerticalMotor.setPower(-0.25);
+        armVerticalMotor2.setPower(-0.25);
 
-        frontRightMotor.setPower(fRightPower);
-        frontLeftMotor.setPower(fLeftPower);
-        backRightMotor.setPower(bRightPower);
-        backLeftMotor.setPower(bLeftPower);
-        armVerticalMotor.setPower(verticalPower);
-        armExtensionMotor.setPower(gamepad2.left_stick_y);
 
-        clawServo2.setDirection(Servo.Direction.REVERSE);
 
-        //// Claw Movements.////
-        // Close claw when right trigger is pressed
-        if (gamepad2.right_trigger > 0.5) {
-            clawServo1.setPosition(0.9); // Adjust this value as needed for "closed" position
-            clawServo2.setPosition(0.9);
-        } else if (gamepad2.left_trigger > 0.5) {
-            clawServo1.setPosition(0.7); // Adjust this value as needed for "open" position
-            clawServo2.setPosition(0.7);
-        }
 
-        if (gamepad2.y) {
-            clawServo1.setPosition(0.0); // Rotate to 0 degrees
-        }
-
-        //else if (gamepad2.x) {
-        //    clawServo1.setPosition(0.35); // Rotate to 126 degrees
-        //}
     }
 }
