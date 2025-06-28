@@ -164,13 +164,13 @@ public class RightAuto extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            ArmAndServoAction armHook = new ArmAndServoAction(moveArm, moveServo, 1900, 0.9);
+            ArmAndServoAction armHook = new ArmAndServoAction(moveArm, moveServo, 1950, 0.9);
             ArmAndServoAction armRaise = new ArmAndServoAction(moveArm, moveServo, 1490, 0.9);
             ArmAndServoAction armLetgo = new ArmAndServoAction(moveArm, moveServo, 1490, 0.6);
 
             Actions.runBlocking(
                     drive.actionBuilder(startPose)
-                            .strafeToLinearHeading(new Vector2d(0, -23), Math.toRadians(90))
+                            .strafeToLinearHeading(new Vector2d(0, -21), Math.toRadians(90))
                             .afterDisp(1, armRaise)
                             .waitSeconds(1)
                             .strafeToLinearHeading(new Vector2d(0, -35), Math.toRadians(90))
@@ -184,18 +184,18 @@ public class RightAuto extends LinearOpMode {
                             .strafeToLinearHeading(new Vector2d(-45, -55), Math.toRadians(90))
                             .turnTo(Math.toRadians(89.5))
                             .waitSeconds(1)
-                            .strafeToLinearHeading(new Vector2d(-46, -3), Math.toRadians(90))
+                            .strafeToLinearHeading(new Vector2d(-46, -4), Math.toRadians(90))
                             .strafeToLinearHeading(new Vector2d(-42, -55), Math.toRadians(90))
                             .strafeToLinearHeading(new Vector2d(-56, -55), Math.toRadians(90))
-                            .strafeToLinearHeading(new Vector2d(-56, -3), Math.toRadians(90))
+                            .strafeToLinearHeading(new Vector2d(-56, -4), Math.toRadians(90))
                             .strafeToLinearHeading(new Vector2d(-56, -55), Math.toRadians(90))
                             .strafeToLinearHeading(new Vector2d(-72, -55), Math.toRadians(90))
                             .turnTo(Math.toRadians(89))
                             .waitSeconds(0.50)
-                            .strafeToLinearHeading(new Vector2d(-72, 0), Math.toRadians(90))
+                            .strafeToLinearHeading(new Vector2d(-73, 0), Math.toRadians(90))
                        //         new TranslationalVelConstraint(90),
                        //         new ProfileAccelConstraint(-90, 90))
-                            .strafeToLinearHeading(new Vector2d(-72, -2), Math.toRadians(90))
+                            .strafeToLinearHeading(new Vector2d(-73, -2), Math.toRadians(90))
                             .build());
 
         } // eeeeeee
